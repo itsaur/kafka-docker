@@ -31,6 +31,8 @@ matrix:
     env: KAFKA_VERSION=2.7.2
   - scala: 2.13
     env: KAFKA_VERSION=2.8.1
+  - scala: 2.13
+    env: KAFKA_VERSION=3.1.0
 
 # Upgrade Docker Engine so we can use buildx
 before_install:

@@ -33,6 +33,14 @@ if [[ "$MAJOR_VERSION" == "0" && "$MINOR_VERSION" -gt "9" ]] || [[ "$MAJOR_VERSI
     KAFKA_0_10_OPTS="--if-not-exists"
 fi
 
+# Introduced in 2.2. The bin/kafka-topics.sh command line tool is able to
+# connect directly to brokers with --bootstrap-server instead of zookeeper.
+KAFKA_OPTS="--zookeeper ${KAFKA_ZOOKEEPER_CONNECT}"
+if [[ ${MAJOR_VERSION} -eq 2 && ${MINOR_VERSION} -gt 1 ]] || [[ ${MAJOR_VERSION} -gt 2 ]]
+then
+    KAFKA_OPTS="--bootstrap-server ${KAFKA_BOOTSTRAP_SERVER}"
+fi
+
 # Expected format:
 #   name:partitions:replicas:cleanup.policy
 IFS="${KAFKA_CREATE_TOPICS_SEPARATOR-,}"; for topicToCreate in $KAFKA_CREATE_TOPICS; do
@@ -45,7 +53,7 @@ IFS="${KAFKA_CREATE_TOPICS_SEPARATOR-,}"; for topicToCreate in $KAFKA_CREATE_TOP
 
     COMMAND="JMX_PORT='' ${KAFKA_HOME}/bin/kafka-topics.sh \\
 		--create \\
-		--zookeeper ${KAFKA_ZOOKEEPER_CONNECT} \\
+    ${KAFKA_OPTS} \\
 		--topic ${topicConfig[0]} \\
 		--partitions ${topicConfig[1]} \\
 		--replication-factor ${topicConfig[2]} \\
