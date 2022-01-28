@@ -1,4 +1,4 @@
-FROM azul/zulu-openjdk-alpine:17.0.1-17.30.15-jre-headless
+FROM azul/zulu-openjdk-alpine:8u312-8.58.0.13-jre-headless
 
 ARG kafka_version=3.1.0
 ARG scala_version=2.13
